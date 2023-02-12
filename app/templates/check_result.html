@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Check result</title>
+    <style>
+     .imgSize{
+       height: 512px; 
+       width : 1024px;
+       margin: auto;
+     }
+    </style>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="/jquery.js"></script>
+    <script src="/jquery-ui.js"></script>
+    <script>
+    $(function() {
+      $("#tabs").tabs();
+    });
+    </script>
+    <script>
+    $(function() {
+        $('#find_case').click(function() {
+            var form_data = new FormData($('#send_ID')[0]);
+        //for each entry, add to formdata to later access via $_FILES["file" + i]
+        /*    for (var i = 0, len = 2; i < len; i++) {
+            form_data.append("file" + i, $('#file')[i]);
+            }*/
+            $.ajax({
+                type: 'POST',
+                url: '/send_data',
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data) { 
+                  $( ".inner" ).append( $("<div>").append($("<img>").attr("id","tabs-1").attr( "src", data[0]).attr("aria-hidden","false").attr("style","display: inline;").addClass("imgSize")));
+                  $( ".inner" ).append( $("<div>").append($("<img>").attr("id","tabs-2").attr( "src", data[1]).attr("aria-hidden","true").attr("style","display: none;").addClass("imgSize")));
+                  $( ".inner" ).append( $("<div>").append($("<img>").attr("id","tabs-3").attr( "src", data[2]).attr("aria-hidden","true").attr("style","display: none;").addClass("imgSize")));
+                  $( ".inner" ).append( $("<div>").append($("<img>").attr("id","tabs-4").attr( "src", data[3]).attr("aria-hidden","true").attr("style","display: none;").addClass("imgSize")));
+                  $( ".inner" ).append( $("<div>").append($("<img>").attr("id","tabs-5").attr( "src", data[4]).attr("aria-hidden","true").attr("style","display: none;").addClass("imgSize")));
+                  //window.location= data                  
+                },
+            });
+        });
+    });    
+
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">Home</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li><a href="/analysis">Start Analysis</a></li>
+            <li><a href="/check_result">Check Result</a></li>
+            <li><a href="#">Guide Book</a></li>
+            <li><a href="#">Contact US</a></li>
+        </ul>
+    </div>
+    </div>
+    </nav>
+
+   <div class="container">
+
+      <form class="form-signin ajax" id="send_ID" name='send_ID'method="post" data-replace="#res"  role="form">
+        <h2 class="form-signin-heading">Please enter your case ID</h2>
+        <input type="text" name="find_ID" class="form-control" placeholder="Case_ID" required autofocus>
+        
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button id="find_case"class="btn btn-lg btn-primary btn-block" type="button">Find my result</button>
+      </form>
+    
+    <div id="tabs" class="inner">
+      <ul>
+         <li><a href="#tabs-1">Cosine</a></li>
+         <li><a href="#tabs-2">Geometric</a></li>
+         <li><a href="#tabs-3">Jaccard</a></li>
+         <li><a href="#tabs-4">PCC</a></li>
+         <li><a href="#tabs-5">Simpson</a></li>
+      </ul>
+    </div>
+   </div>
+</body>
+</html>

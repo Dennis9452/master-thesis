@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Analysis page</title>
+    <style>
+     .ui-progressbar {
+       position: relative;
+     }
+     .progress-label {
+       position: absolute;
+       left: 50%;
+       top: 4px;
+       font-weight: bold;
+       text-shadow: 1px 1px 0 #fff;
+     }
+    </style>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="/jquery.js"></script>
+    <script src="/jquery-ui.js"></script>
+    <script type="text/javascript" src='/js/bootstrap.min.js'></script>
+    <script>
+     $(function(){
+      $('#upload-file-btn').click(function() {
+            $(".container").append($("<div>").attr( "id","progressbar").append($("<div>").attr( "class","progress-label").attr("Loading")));
+      });
+     });
+    </script>
+    <script>
+    $(function() {
+        $('#upload-file-btn')
+         .button()
+         .click(function() {
+            $( this ).button( "option", {
+              disabled: true,
+              label: "Uploading..."
+            });
+            var form_data = new FormData($('#upload-file')[0]);
+        //for each entry, add to formdata to later access via $_FILES["file" + i]
+        /*    for (var i = 0, len = 2; i < len; i++) {
+            form_data.append("file" + i, $('#file')[i]);
+            }*/
+            $.ajax({
+                type: 'POST',
+                url: '/upload_page',
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data) {
+                 window.location= data
+                },
+            });
+        });
+    });
+    </script>
+    <script>
+      $( function() {
+        var progressbar = $( "#progressbar" ),
+          progressLabel = $( ".progress-label" );
+ 
+        progressbar.progressbar({
+          value: false,
+          change: function() {
+            progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+          },
+          complete: function() {
+            progressLabel.text( "Complete!" );
+          }
+        });
+ 
+        function progress() {
+          var val = progressbar.progressbar( "value" ) || 0; 
+          progressbar.progressbar( "value", val + 2 );
+ 
+          if ( val < 99 ) {
+            setTimeout( progress, 100 );
+          }
+        } 
+ 
+        setTimeout( progress, 2000 );
+      } );
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">Home</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li><a href="/analysis">Start Analysis</a></li>
+            <li><a href="/check_result">Check Result</a></li>
+            <li><a href="#">Guide Book</a></li>
+            <li><a href="#">Contact US</a></li>
+        </ul>
+    </div>
+    </div>
+    </nav>
+
+    <div class="container">
+    
+        <h1>Upload new File</h1>
+        <form id="upload-file" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <label for="mRNA">Select your mRNA file</label>
+        <input id="mRNA" name="mRNA" type="file" required="required" >
+        <label for="lncRNA">Select your lncRNA file</label>
+        <input id="lncRNA" name="lncRNA" type="file" required="required" >
+        <label for="miRNA">Select your miRNA file</label>
+        <input id="miRNA" name="miRNA" type="file" required="required" >
+    </fieldset>
+    <fieldset>
+        <button id="upload-file-btn" type="button">Upload</button>
+    </fieldset>
+        </form>           
+        
+    </div>
+     
+  </body>
+  <script type="text/javascript">
+    function check(form1) {
+      if (upload-file.mRNA.value == "" && upload-file.lncRNA.value == "" && upload-file.miRNA.value == "")
+         alert("Please select the file")
+         upload-file.mRNA.focus()
+         upload-file.lncRNA.focus()
+         upload-file.miRNA.focus()
+    }
+  </script>
+</html>
